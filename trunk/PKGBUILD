@@ -27,7 +27,13 @@ validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D'  # Emil Velikov <emil.l
               '71C4B75620BC75708B4BDB254C95FAAB3EB073EC'  # Dylan Baker <dylan@pnwbakers.com>
               '57551DE15B968F6341C248F68D8E31AFC32428A6') # Eric Engestrom <eric@engestrom.ch>
 
+groups=('modified')
+
 build() {
+  # Patch it to enable VK_EXT_image_drm_format_modifier extension.
+  sed -i "s/^\(.\+'VK_EXT_image_drm_format_modifier', \+[0-9]\+, \+\)False),$/\1True),/g" \
+    ${srcdir}/mesa-$pkgver/src/intel/vulkan/anv_extensions.py
+
   arch-meson mesa-$pkgver build \
     -D b_lto=true \
     -D b_ndebug=true \
